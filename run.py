@@ -235,33 +235,41 @@ def save_data():
     """Save user data to the database, updating existing entries if found."""
     global user_data
     try:
+        # Initial processing notification
+        print(Fore.YELLOW + "\nProcessing request, please wait...", end="\r")
+        
         sheet = SHEET.get_worksheet(0)
         records = sheet.get_all_records()
-        headers = sheet.row_values(1)  # Get header row for validation
+        headers = sheet.row_values(1)
 
         # Prepare the row data in the correct order
         row_data = [user_data["name"], user_data["salary"]]
         row_data += [user_data["spending"][cat] for cat in SPENDING_CATEGORIES]
 
-        # Check for existing entry using case-insensitive comparison
+        # Check for existing entry
         existing_row = None
         for i, record in enumerate(records):
             if record.get("Name", "").strip().lower() == user_data["name"].strip().lower():
-                existing_row = i + 2  # Convert to sheet row number
+                existing_row = i + 2
                 break
 
+        # Keep processing message visible during API operations
+        print(Fore.YELLOW + "Processing request, please wait... (Contacting Google Sheets)" + Style.RESET_ALL) 
+
         if existing_row:
-            # Update existing row while preserving formulas/formatting
+            # Update existing row
             for col, value in enumerate(row_data, start=1):
                 sheet.update_cell(existing_row, col, value)
-            print(Fore.GREEN + f"\nExisting data updated successfully in {sheet.title}!")
+            success_msg = f"\nExisting data updated successfully in {sheet.title}!"
         else:
-            # Append new row with proper data validation
+            # Validate before appending
             if len(row_data) != len(headers):
                 raise ValueError("Data columns don't match sheet structure")
             sheet.append_row(row_data)
-            print(Fore.GREEN + f"\nNew data saved successfully to {sheet.title}!")
+            success_msg = f"\nNew data saved successfully to {sheet.title}!"
 
+        # Final success message with timestamp
+        print(Fore.GREEN + success_msg)
         print(f"Last updated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" + Style.RESET_ALL)
 
     except ValueError as ve:
@@ -275,7 +283,7 @@ def save_data():
         print("Your data has NOT been saved. Please try again later.")
     finally:
         print(Style.RESET_ALL)  # Ensure terminal color reset
-
+        
 def load_data():
     """Load user data from the database based on the user's name."""
     global user_data
