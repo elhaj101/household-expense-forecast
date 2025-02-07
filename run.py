@@ -232,14 +232,49 @@ def forecast_savings():
     print(Fore.CYAN + "-------------------------\n")
 
 def save_data():
-    """Save user data to the database."""
+    """Save user data to the database, updating existing entries if found."""
+    global user_data
     try:
         sheet = SHEET.get_worksheet(0)
-        row = [user_data["name"], user_data["salary"]] + list(user_data["spending"].values())
-        sheet.append_row(row)
-        print(Fore.GREEN + f"\nData saved to database: {sheet.title}\n")
+        records = sheet.get_all_records()
+        headers = sheet.row_values(1)  # Get header row for validation
+
+        # Prepare the row data in the correct order
+        row_data = [user_data["name"], user_data["salary"]]
+        row_data += [user_data["spending"][cat] for cat in SPENDING_CATEGORIES]
+
+        # Check for existing entry using case-insensitive comparison
+        existing_row = None
+        for i, record in enumerate(records):
+            if record.get("Name", "").strip().lower() == user_data["name"].strip().lower():
+                existing_row = i + 2  # Convert to sheet row number
+                break
+
+        if existing_row:
+            # Update existing row while preserving formulas/formatting
+            for col, value in enumerate(row_data, start=1):
+                sheet.update_cell(existing_row, col, value)
+            print(Fore.GREEN + f"\nExisting data updated successfully in {sheet.title}!")
+        else:
+            # Append new row with proper data validation
+            if len(row_data) != len(headers):
+                raise ValueError("Data columns don't match sheet structure")
+            sheet.append_row(row_data)
+            print(Fore.GREEN + f"\nNew data saved successfully to {sheet.title}!")
+
+        print(f"Last updated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" + Style.RESET_ALL)
+
+    except ValueError as ve:
+        print(Fore.RED + f"\nData validation error: {ve}")
+        print("Please check your spreadsheet structure matches the application format.")
+    except gspread.exceptions.APIError as api_err:
+        print(Fore.RED + f"\nGoogle API Error: {api_err}")
+        print("Please check your internet connection and spreadsheet permissions.")
     except Exception as e:
-        print(Fore.RED + f"\nError saving data: {e}\n")
+        print(Fore.RED + f"\nUnexpected error saving data: {e}")
+        print("Your data has NOT been saved. Please try again later.")
+    finally:
+        print(Style.RESET_ALL)  # Ensure terminal color reset
 
 def load_data():
     """Load user data from the database based on the user's name."""
