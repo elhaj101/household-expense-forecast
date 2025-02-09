@@ -135,7 +135,7 @@ The software has undergone manual testing and debugging to verify functionality.
 3. Enter a name for your project and click **Create**.
 
 ## Step 2: Enable the Google Sheets API
-1. In your project dashboard, click on **APIs & Services** > **Library**.
+1. In  project dashboard, click on **APIs & Services** > **Library**.
 2. Search for "Google Sheets API" and click on it.
 3. Click **Enable**.
 
