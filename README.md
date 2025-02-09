@@ -3,6 +3,61 @@
 ## Overview
 This software helps users track their household expenses, analyze spending habits, and forecast savings. It provides a user-friendly interface and integrates with Google Sheets for data storage. it is not focused on tracking spending rather focused on setting spendings and savings thresholds and goals all while helping the user prioritise spending in the household on different criterias.
 
+Here's the entire section formatted in Markdown:
+
+```markdown
+## Running the Software
+
+You can run this CLI software by either forking/cloning the repository or using the Heroku deployed sandbox environment.
+
+### Option 1: Forking/Cloning the Repository
+
+1. **Fork the Repository**: Click the "Fork" button on the top right of this repository to create your own copy.
+
+2. **Clone the Repository**: Open your terminal and run the following command to clone your forked repository:
+
+   ```bash
+   git clone https://github.com/your-username/repository-name.git
+   ```
+
+   Replace `your-username` and `repository-name` with your GitHub username and the name of this repository.
+
+3. **Navigate to the Directory**:
+
+   ```bash
+   cd repository-name
+   ```
+
+4. **Install Dependencies**: Make sure you have Python 3 installed. Then, install the required packages by running:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Run the Software**: You can now run the software using:
+
+   ```bash
+   python3 your_script.py
+   ```
+
+   Replace `your_script.py` with the name of the main Python file.
+
+   ![Placeholder Image](assets/images/python3.png)
+
+
+### Option 2: Using the Heroku Deployed Sandbox Environment
+
+1. **Access the Deployed Application**: Navigate to the URL of your Heroku deployed application. You can find this in your Heroku dashboard.
+
+2. **Interact with the CLI**: Follow the instructions provided in the application interface to interact with the CLI features.
+
+### Additional Notes
+
+- Ensure you have the necessary environment variables set up in Heroku if your application requires them.
+- For any issues, please refer to the troubleshooting section or open an issue in this repository.
+
+
+
 ## Functionality
 The software includes key functions such as:
 
@@ -66,7 +121,78 @@ The code is organized into small functions, each addressing specific tasks. This
 ## Testing
 The software has undergone manual testing and debugging to verify functionality. Linter checks were conducted to maintain code quality.
 
+ ![Placeholder Image](assets/images/validation.png)
+
+ score: 8.89
+
+
+### Issue and solution
+
+- issue:
+ Repeated saves create duplicate entries instead of updating.
+ ![Placeholder Image](assets/images/issue1.png)
+ ![Placeholder Image](assets/images/issue1.2.png)
+
+- solution:  
+
+- Get the worksheet.
+- Get all records as a list of dictionaries.
+- Loop through each record, check if the 'Name' matches.
+- If found, note the index, calculate the row number (index + 2).
+- Prepare the row data as a list, same as before.
+- Use sheet.update(row_number, [row_data]) to update that row.
+- If not found, append the row as before.
+![Placeholder Image](assets/images/solution1.png)
+
+
+## Deployment Steps
+
+This section outlines the steps taken to deploy the software on Heroku and connect it with GitHub.
+
+### Prerequisites
+
+- Ensure you have a Heroku account.
+- Install the Heroku CLI on your local machine.
+- Have your GitHub repository ready.
+
+### Steps to Deploy
+
+1. **Log in to Heroku**:
+   Open your terminal and log in to your Heroku account:
+
+   ```bash
+   heroku login
+
+- Create a New Heroku Application:
+```bash
+heroku create your-app-name
+```
+
+- Link Your GitHub Repository:
+```bash
+heroku git:remote -a your-app-name
+```
+- Set Up Environment Variables:
+```bash
+heroku config:set VARIABLE_NAME=value
+```
+- Deploy the Application:
+```bash
+git push heroku main
+```
+
+- Open Your Application:
+```bash
+heroku open
+```
+
+- Monitor Logs:
+To check the logs for any issues, use:
+```bash
+heroku logs --tail
+```
 ## Conclusion
+
 Future enhancements will include:
 
 - Implementing visualizations and graphs for the forecast function to offer better insights into spending and savings.

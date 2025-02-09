@@ -52,8 +52,8 @@ def greet_user():
     else:
         greeting = "evening"
 
-    print(f"\nHello, it's a good {greeting}!")
-    print("Welcome to 'The Personal Household Expense Tracker'.\n")
+    print(f"\nHello, Good {greeting}!")
+    print("Welcome to 'The Personal Household Expense Forecast'.\n")
 
 def display_spending_categories():
     """Display the list of spending categories with descriptions and prompt the user to continue."""
