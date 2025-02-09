@@ -47,9 +47,7 @@ You can run this CLI software by either forking/cloning the repository or using 
 
 ### Option 2: Using the Heroku Deployed Sandbox Environment
 
-1. **Access the Deployed Application**: Navigate to the URL of your Heroku deployed application. You can find this in your Heroku dashboard.
-
-2. **Interact with the CLI**: Follow the instructions provided in the application interface to interact with the CLI features.
+1. **Access the Deployed Application**: https://household-expense-forecast-41d61ae28db7.herokuapp.com/
 
 ### Additional Notes
 
@@ -563,7 +561,10 @@ git push heroku main
 - Open Your Application:
 ```bash
 heroku open
+
 ```
+ ![Placeholder Image](assets/images/heroku-screen.png)
+
 
 - Monitor Logs:
 To check the logs for any issues, use:
