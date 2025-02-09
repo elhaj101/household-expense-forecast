@@ -126,6 +126,61 @@ The software has undergone manual testing and debugging to verify functionality.
  score: 8.89
 
 
+
+ # Steps to Enable Google Sheets API
+
+## Step 1: Create a Google Cloud Project
+1. Go to the **Google Cloud Console**.
+2. Click on the project drop-down and select **New Project**.
+3. Enter a name for your project and click **Create**.
+
+## Step 2: Enable the Google Sheets API
+1. In your project dashboard, click on **APIs & Services** > **Library**.
+2. Search for "Google Sheets API" and click on it.
+3. Click **Enable**.
+
+## Step 3: Create Service Account
+1. Navigate to **APIs & Services** > **Credentials**.
+2. Click on **Create Credentials** and select **Service Account**.
+3. Fill in the service account details (name, description) and click **Create**.
+4. In the next step, you can assign roles. For basic access, select **Editor** or **Viewer**. Click **Continue**.
+5. Click **Done**.
+
+## Step 4: Generate Service Account Key
+1. After creating the service account, you will be redirected to the service accounts page. Click on the service account you just created.
+2. Go to the **Keys** tab and click **Add Key** > **Create New Key**.
+3. Choose **JSON** as the key type and click **Create**. This will download a JSON file containing your service account credentials (e.g., `creds.json`).
+
+## Step 5: Share Google Sheet with Service Account
+1. Open the Google Sheet you want to access.
+2. Click on the **Share** button in the top right corner.
+3. In the **Share with people and groups** window, enter the client email from your downloaded JSON file (it looks like `your-service-account@your-project.iam.gserviceaccount.com`).
+4. Set the permissions (e.g., **Viewer** or **Editor**) and click **Send**.
+
+## Step 6: Link to Your Code
+1. Ensure your `creds.json` file (the one you downloaded) is in the same directory as your Python script.
+2. In your Python script, add the following lines to authenticate and access your Google Sheet:
+
+    ```python
+    from google.oauth2.service_account import Credentials
+    import gspread
+
+    SCOPE = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    CREDS = Credentials.from_service_account_file('creds.json')
+    SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+    GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+    SHEET = GSPREAD_CLIENT.open("expense_tracker")  # Replace with your Google Sheet name
+    ```
+
+## Step 7: Run Your Code
+Now that everything is set up, you can run your Python script. It should authenticate with the Google Sheets API and interact with your specified Google Sheet without any issues.
+
+
 ### Issue and solution
 
 - issue:
